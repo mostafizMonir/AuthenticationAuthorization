@@ -32,6 +32,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 
 app.MapGet("/users", async (AppDbContext dbContext) =>
