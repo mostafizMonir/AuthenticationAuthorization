@@ -18,7 +18,8 @@ namespace MilanAuth
             services.AddDbContext<Data.AppDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
-            var jwtKey = configuration["Jwt:Key"] ?? "super_secret_key_123!";
+            // var jwtKey = configuration["Jwt:Key"] ?? "super_secret_key_123!";
+            var jwtKey = "a6vQ~9#kP2$tLp5*WnZ8&bY4^cX7!mD3";
             var jwtIssuer = configuration["Jwt:Issuer"] ?? "MilanAuthIssuer";
 
             services.AddAuthentication(options =>
@@ -40,6 +41,8 @@ namespace MilanAuth
             });
 
             services.AddAuthorization();
+
+            services.AddControllers();
 
             return services;
         }
