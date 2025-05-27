@@ -4,7 +4,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
-      - Keycloak__Authority=http://keycloak:8080/realms/your-realm
+      - Keycloak__Authority=http://keycloak:8080/realms/monir_realm
       - Keycloak__Audience=your-api-audience
     ports:
       - "8080"
