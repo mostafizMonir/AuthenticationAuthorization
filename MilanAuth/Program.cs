@@ -1,18 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using MilanAuth.Data;
+using BCrypt.Net;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Security.Claims;
+using MilanAuth;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Register all services using extension method
+builder.Services.AddApplicationServices(builder.Configuration);
 
-// Add DbContext for PostgreSQL
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Read JWT config for token generation
+var jwtKey = builder.Configuration["Jwt:Key"] ?? "super_secret_key_123!";
+var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "MilanAuthIssuer";
 
 var app = builder.Build();
 
@@ -32,20 +34,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
 app.UseHttpsRedirection();
 
-app.MapGet("/users", async (AppDbContext dbContext) =>
-{
-    var users = await dbContext.Users.ToListAsync();
-    return Results.Ok(users);
-});
+app.UseAuthentication();
+app.UseAuthorization();
 
-app.MapPost("/user", async (User user, AppDbContext dbContext) =>
-{
-    dbContext.Users.Add(user);
-    await dbContext.SaveChangesAsync();
-    return Results.Created($"/user/{user.Id}", user);
-});
+app.MapControllers();
 
 app.Run();
