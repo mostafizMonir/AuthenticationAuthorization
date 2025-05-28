@@ -1,14 +1,17 @@
 ﻿using EventDispatcher.Core.Abstractions;
 
 namespace EventDispatcher.Core.Events;
-public class OrderShippedEvent :IDomainEvent
+
+public class OrderShippedEvent : IDomainEvent
 {
-    public Guid OrderId { get; set; }
+    public Guid Id { get; }
+    public DateTime OccurredOn { get; }
+    public Guid OrderId { get; }
+
     public OrderShippedEvent(Guid orderId)
     {
+        Id = Guid.NewGuid();
+        OccurredOn = DateTime.UtcNow;
         OrderId = orderId;
-        OccurredOn = DateTime.Now;
     }
-
-    public DateTime OccurredOn { get; set; }
 }

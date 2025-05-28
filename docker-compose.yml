@@ -2,8 +2,8 @@ services:
   milanauth:
     image: ${DOCKER_REGISTRY-}milanauth
     build:
-      context: MilanAuth
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: MilanAuth/Dockerfile
     depends_on:
       - postgres
      # - keycloak
