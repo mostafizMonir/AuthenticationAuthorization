@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace MilanAuth.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class OrdersController(IEventDispatcher eventDispatcher) : ControllerBase
+public class OrdersController(IEventDispatcher<IDomainEvent> eventDispatcher) : ControllerBase
 {
-    public readonly IEventDispatcher EventDispatcher = eventDispatcher;
+    public readonly IEventDispatcher<IDomainEvent> EventDispatcher = eventDispatcher;
 
     [HttpPost]
     public async Task<IActionResult> ShipOrder()

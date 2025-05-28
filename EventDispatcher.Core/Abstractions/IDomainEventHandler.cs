@@ -1,4 +1,4 @@
 ﻿namespace EventDispatcher.Core.Abstractions;
-internal interface IDomainEventHandler<T> where T : IDomainEvent
+public interface IDomainEventHandler<T> where T : IDomainEvent
 {
 }

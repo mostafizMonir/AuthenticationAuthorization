@@ -1,7 +1,7 @@
 ﻿using EventDispatcher.Core.Events;
 
 namespace EventDispatcher.Core.Abstractions;
-public interface IEventDispatcher
+public interface IEventDispatcher<T> where T : IDomainEvent
 {
-    Task DispatchAsync(IDomainEvent domainEvent);
+    Task DispatchAsync(T domainEvent);
 }
