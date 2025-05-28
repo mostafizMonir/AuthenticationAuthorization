@@ -7,6 +7,10 @@ using EventDispatcher.Core.Abstractions;
 using EventDispatcher.Core.Events;
 
 namespace EventDispatcher.Core.Handlers;
-internal class OrderShippedEmailHandler:IDomainEventHandler<OrderShippedEvent>
+public class OrderShippedEmailHandler:IDomainEventHandler<OrderShippedEvent>
 {
+    public async Task HandleAsync(OrderShippedEvent domainEvent)
+    {
+        
+    }
 }

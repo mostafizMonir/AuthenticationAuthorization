@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using EventDispatcher.Core.Abstractions;
+using EventDispatcher.Core.Dispatchers;
 
 namespace MilanAuth
 {
@@ -14,7 +16,7 @@ namespace MilanAuth
             services.AddOpenApi();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
-
+            
             services.AddDbContext<Data.AppDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
@@ -39,10 +41,13 @@ namespace MilanAuth
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
                 };
             });
+            
 
             services.AddAuthorization();
 
             services.AddControllers();
+
+            services.AddScoped<IEventDispatcher<IDomainEvent>, DomainEventDispatcher>();
 
             return services;
         }
