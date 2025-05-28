@@ -1,6 +1,7 @@
 ﻿namespace EventDispatcher.Core.Abstractions;
 
-    internal interface IDomainEvent
+    public interface IDomainEvent
     {
+        DateTime OccurredOn { get;set };
     }
 

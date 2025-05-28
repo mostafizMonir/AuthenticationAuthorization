@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EventDispatcher.Core.Abstractions;
 
 namespace EventDispatcher.Core.Events;
-internal class OrderShippedEvent
+public class OrderShippedEvent :IDomainEvent
 {
+    public Guid OrderId { get; set; }
+    public OrderShippedEvent(Guid orderId)
+    {
+        OrderId = orderId;
+        OccurredOn = DateTime.Now;
+    }
+
+    public DateTime OccurredOn { get; set; }
 }
