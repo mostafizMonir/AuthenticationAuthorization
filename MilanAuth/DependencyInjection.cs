@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using Scrutor;
 
 namespace MilanAuth;
 
@@ -57,8 +58,16 @@ public static class DependencyInjection
 
         services.AddControllers();
 
-        services.AddScoped<IEventDispatcher<IDomainEvent>, DomainEventDispatcher>();
-        services.AddScoped<IDomainEventHandler<OrderShippedEvent>, OrderShippedEmailHandler>();
+        // Register all event dispatchers and handlers using Scrutor
+        services.Scan(scan => scan
+            .FromAssembliesOf(typeof(IEventDispatcher<>), typeof(IDomainEventHandler<>))
+                .AddClasses(classes => classes.AssignableTo(typeof(IEventDispatcher<>)))
+                    .AsImplementedInterfaces()
+                    .WithScopedLifetime()
+                .AddClasses(classes => classes.AssignableTo(typeof(IDomainEventHandler<>)))
+                    .AsImplementedInterfaces()
+                    .WithScopedLifetime()
+        );
 
         return services;
     }
