@@ -25,10 +25,10 @@ public class DomainEventDispatcher: IEventDispatcher<IDomainEvent>
         //     .Select(Activator.CreateInstance)
         //     .Cast<IDomainEventHandler<IDomainEvent>>()
         //     .ToList();
-
-        var handlers = _serviceProvider.GetServices(handlerType)
-            .Cast<IDomainEventHandler<IDomainEvent>>()
-            .ToList();
+        var handlers = _serviceProvider.GetServices(handlerType);
+        // var handlers = _serviceProvider.GetServices(handlerType)
+        //     .Cast<IDomainEventHandler<IDomainEvent>>()
+        //     .ToList();
 
         foreach (var domainEventHandler in handlers)
         {

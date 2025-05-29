@@ -5,7 +5,7 @@ namespace EventDispatcher.Core.Events;
 public class OrderShippedEvent : IDomainEvent
 {
     public Guid Id { get; }
-    public DateTime OccurredOn { get; }
+    public DateTime OccurredOn { get; set; }
     public Guid OrderId { get; }
 
     public OrderShippedEvent(Guid orderId)
