@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using MilanAuth.Data;
 using Serilog;
 using Scrutor;
 
@@ -33,6 +34,8 @@ public static class DependencyInjection
             
         services.AddDbContext<Data.AppDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
+        services.AddScoped(typeof(Repository<>));
 
         // var jwtKey = configuration["Jwt:Key"] ?? "super_secret_key_123!";
         var jwtKey = "a6vQ~9#kP2$tLp5*WnZ8&bY4^cX7!mD3";
@@ -68,6 +71,8 @@ public static class DependencyInjection
                     .AsImplementedInterfaces()
                     .WithScopedLifetime()
         );
+
+        
 
         return services;
     }

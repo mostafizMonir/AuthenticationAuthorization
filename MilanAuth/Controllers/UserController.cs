@@ -6,8 +6,8 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace MilanAuth.Controllers
-{
+namespace MilanAuth.Controllers;
+
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
@@ -72,4 +72,4 @@ namespace MilanAuth.Controllers
             return Ok(new { token = tokenString });
         }
     }
-} 
+

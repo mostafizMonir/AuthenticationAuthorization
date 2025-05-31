@@ -1,5 +1,5 @@
-namespace MilanAuth.Data
-{
+namespace MilanAuth.Data;
+
     public class User
     {
         public int Id { get; set; }
@@ -7,4 +7,3 @@ namespace MilanAuth.Data
         public string Email { get; set; }
         public string PasswordHash { get; set; }
     }
-} 
