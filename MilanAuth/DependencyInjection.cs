@@ -9,8 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using MilanAuth.Data;
-using Serilog;
+using MilanAuth.Services;
 using Scrutor;
+using Serilog;
 
 namespace MilanAuth;
 
@@ -36,6 +37,7 @@ public static class DependencyInjection
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped(typeof(Repository<>));
+        services.AddScoped(typeof(RabbitMQService));
 
         // var jwtKey = configuration["Jwt:Key"] ?? "super_secret_key_123!";
         var jwtKey = "a6vQ~9#kP2$tLp5*WnZ8&bY4^cX7!mD3";

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using MilanAuth.Data;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using MilanAuth.Services;
 
 namespace MilanAuth.Controllers;
 
@@ -10,10 +11,12 @@ namespace MilanAuth.Controllers;
     public class OutboxController : ControllerBase
     {
         private readonly Repository<OutboxMessage> _repository;
+        private readonly RabbitMQService  _mqService;
 
-        public OutboxController(Repository<OutboxMessage> repository)
+        public OutboxController(Repository<OutboxMessage> repository, RabbitMQService mqService)
         {
             _repository = repository;
+            _mqService = mqService;
         }
 
         [HttpGet]
@@ -43,6 +46,7 @@ namespace MilanAuth.Controllers;
         {
             if (id != message.Id) return BadRequest();
             await _repository.UpdateAsync(message);
+            _mqService.PublishMessage();
             return NoContent();
         }
 
