@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using MilanAuth.Abstractions;
 using MilanAuth.Data;
 using MilanAuth.Services;
 using Scrutor;
@@ -38,6 +39,7 @@ public static class DependencyInjection
 
         services.AddScoped(typeof(Repository<>));
         services.AddScoped(typeof(RabbitMQService));
+        services.AddScoped<IImageProcessingService, ImageProcessingService>();
 
         // var jwtKey = configuration["Jwt:Key"] ?? "super_secret_key_123!";
         var jwtKey = "a6vQ~9#kP2$tLp5*WnZ8&bY4^cX7!mD3";
