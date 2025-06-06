@@ -1,24 +1,40 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Threading.Channels;
 
 namespace DotNetChannel.Services;
 
 public class MessageReceiverService : BackgroundService
 {
     private readonly ILogger<MessageReceiverService> _logger;
+    private readonly IMessageService _messageService;
 
-    public MessageReceiverService(ILogger<MessageReceiverService> logger)
+    public MessageReceiverService(ILogger<MessageReceiverService> logger, IMessageService messageService)
     {
         _logger = logger;
+        _messageService = messageService;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while (!stoppingToken.IsCancellationRequested)
+        var reader = _messageService.GetChannelReader();
+
+        try
         {
-            _logger.LogInformation("Message receiver service is running at: {time}", DateTimeOffset.Now);
-            // Here we'll implement the actual message receiving logic
-            await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+            await foreach (var message in reader.ReadAllAsync(stoppingToken))
+            {
+                _logger.LogInformation($"Received message: {message}");
+                // Process the message here
+                await Task.Delay(100, stoppingToken); // Simulate some processing time
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Normal shutdown
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error processing messages");
         }
     }
 }
