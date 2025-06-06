@@ -1,4 +1,5 @@
 using System.Text;
+using DotNetChannel.Services;
 using EventDispatcher.Core.Abstractions;
 using EventDispatcher.Core.Dispatchers;
 using EventDispatcher.Core.Events;
@@ -40,6 +41,8 @@ public static class DependencyInjection
         services.AddScoped(typeof(Repository<>));
         services.AddScoped(typeof(RabbitMQService));
         services.AddScoped<IImageProcessingService, ImageProcessingService>();
+
+        services.AddScoped<IMessageService, MessageService>();
 
         // var jwtKey = configuration["Jwt:Key"] ?? "super_secret_key_123!";
         var jwtKey = "a6vQ~9#kP2$tLp5*WnZ8&bY4^cX7!mD3";
