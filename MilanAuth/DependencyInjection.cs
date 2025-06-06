@@ -1,4 +1,5 @@
 using System.Text;
+using DotNetChannel.Models;
 using DotNetChannel.Services;
 using EventDispatcher.Core.Abstractions;
 using EventDispatcher.Core.Dispatchers;
@@ -44,6 +45,9 @@ public static class DependencyInjection
 
         services.AddSingleton<IMessageService, MessageService>();
         services.AddHostedService<MessageReceiverService>();
+
+        services.AddScoped<IdGenerator>();
+        services.AddTransient(typeof(IdPrinter));
 
         // var jwtKey = configuration["Jwt:Key"] ?? "super_secret_key_123!";
         var jwtKey = "a6vQ~9#kP2$tLp5*WnZ8&bY4^cX7!mD3";
