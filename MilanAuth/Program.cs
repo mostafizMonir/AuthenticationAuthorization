@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
 using MilanAuth;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Add Prometheus metrics endpoint
+app.UseMetricServer();
+app.UseHttpMetrics();
 
 app.UseAuthentication();
 app.UseAuthorization();
