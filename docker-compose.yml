@@ -22,25 +22,25 @@ services:
       - "5456:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-     # - ./init-keycloak.sql:/docker-entrypoint-initdb.d/init-keycloak.sql 
+      - ./init-keycloak.sql:/docker-entrypoint-initdb.d/init-keycloak.sql 
 
-  # keycloak:
-  #   image: quay.io/keycloak/keycloak:24.0
-  #   depends_on:
-  #     - postgres
-  #   environment:
-  #     KC_DB: postgres
-  #     KC_DB_URL: jdbc:postgresql://postgres:5432/milanauth?currentSchema=keycloak
-  #     KC_DB_USERNAME: postgres
-  #     KC_DB_PASSWORD: postgres
-  #     KEYCLOAK_ADMIN: admin
-  #     KEYCLOAK_ADMIN_PASSWORD: admin
-  #     KC_HOSTNAME: localhost
-  #     KC_HTTP_ENABLED: "true"
-  #     KC_DB_SCHEMA: keycloak  # Explicit schema declaration (optional but recommended)
-  #   ports:
-  #     - "8080:8080"
-  #   command: ["start-dev"]
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    depends_on:
+      - postgres
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/milanauth?currentSchema=keycloak
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HOSTNAME: localhost
+      KC_HTTP_ENABLED: "true"
+      KC_DB_SCHEMA: keycloak  # Explicit schema declaration (optional but recommended)
+    ports:
+      - "8080:8080"
+    command: ["start-dev"]
 
   seq:
     image: datalust/seq:latest
