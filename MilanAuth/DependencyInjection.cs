@@ -46,7 +46,7 @@ public static class DependencyInjection
         services.AddSingleton<IMessageService, MessageService>();
         services.AddHostedService<MessageReceiverService>();
 
-        services.AddScoped<IdGenerator>();
+        services.AddTransient <IdGenerator>();
         services.AddTransient(typeof(IdPrinter));
 
         // var jwtKey = configuration["Jwt:Key"] ?? "super_secret_key_123!";
