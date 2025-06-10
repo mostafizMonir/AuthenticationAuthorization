@@ -74,12 +74,16 @@ public static class DependencyInjection
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         }).AddJwtBearer(o =>
         {
+            o.Authority = configuration["Authentication:Issuer"];
             o.RequireHttpsMetadata = false;
             o.Audience = configuration["Authentication:Audience"] ;
-            o.MetadataAddress = configuration["Authentication:MetadataAddress"];
             o.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidIssuer = configuration["Authentication:Issuer"]
+                ValidateIssuer = true,
+                ValidIssuer = configuration["Authentication:Issuer"], // Must match JWT "iss"
+                ValidateAudience = true,
+                ValidAudience = configuration["Authentication:Audience"], // Must match JWT "aud"
+                ValidateLifetime = true
             };
 
         });
