@@ -40,6 +40,14 @@ app.UseHttpMetrics();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
+app.MapGet("users/me", (ClaimsPrincipal claims) =>
+{
+    return claims.Claims.ToDictionary(c => c.Type, c => c.Value);
+}).RequireAuthorization();
+
 app.MapControllers();
 
 app.Run();
+
+

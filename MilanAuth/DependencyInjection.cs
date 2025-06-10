@@ -50,24 +50,39 @@ public static class DependencyInjection
         services.AddTransient(typeof(IdPrinter));
 
         // var jwtKey = configuration["Jwt:Key"] ?? "super_secret_key_123!";
-        var jwtKey = "a6vQ~9#kP2$tLp5*WnZ8&bY4^cX7!mD3";
-        var jwtIssuer = configuration["Jwt:Issuer"] ?? "MilanAuthIssuer";
+        // var jwtKey = "a6vQ~9#kP2$tLp5*WnZ8&bY4^cX7!mD3";
+        // var jwtIssuer = configuration["Jwt:Issuer"] ?? "MilanAuthIssuer";
+        //
+        // services.AddAuthentication(options =>
+        //     {
+        //         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        //         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        //     })
+        //     .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
+        //     {
+        //         ValidateIssuer = true,
+        //         ValidateAudience = false,
+        //         ValidateLifetime = true,
+        //         ValidateIssuerSigningKey = true,
+        //         ValidIssuer = jwtIssuer,
+        //         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        //     });
 
         services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(o =>
+        {
+            o.RequireHttpsMetadata = false;
+            o.Audience = configuration["Authentication:Audience"] ;
+            o.MetadataAddress = configuration["Authentication:MetadataAddress"];
+            o.TokenValidationParameters = new TokenValidationParameters
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = false,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtIssuer,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
-            });
-            
+                ValidIssuer = configuration["Authentication:Issuer"]
+            };
+
+        });
 
         services.AddAuthorization();
 
