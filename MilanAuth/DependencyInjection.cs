@@ -75,17 +75,43 @@ public static class DependencyInjection
         }).AddJwtBearer(o =>
         {
             o.Authority = configuration["Authentication:Issuer"];
-            o.RequireHttpsMetadata = false;
-            o.Audience = configuration["Authentication:Audience"] ;
+            o.Audience = configuration["Authentication:Audience"];
+            o.RequireHttpsMetadata = false; // Only for development
+
+            // Add these configurations:
             o.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
-                ValidIssuer = configuration["Authentication:Issuer"], // Must match JWT "iss"
                 ValidateAudience = true,
-                ValidAudience = configuration["Authentication:Audience"], // Must match JWT "aud"
-                ValidateLifetime = true
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = configuration["Authentication:Issuer"],
+                ValidAudience = configuration["Authentication:Audience"],
+                // Important for Keycloak:
+                ClockSkew = TimeSpan.FromSeconds(30) // Adjust tolerance as needed
             };
 
+            o.Events = new JwtBearerEvents
+            {
+                OnAuthenticationFailed = context =>
+                {
+                    var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                    logger.LogError("Authentication failed: {Exception}", context.Exception);
+                    return Task.CompletedTask;
+                },
+                OnTokenValidated = context =>
+                {
+                    var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                    logger.LogInformation("Token validated successfully");
+                    return Task.CompletedTask;
+                },
+                OnChallenge = context =>
+                {
+                    var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                    logger.LogWarning("Challenge issued: {Error}", context.Error);
+                    return Task.CompletedTask;
+                }
+            };
         });
 
         services.AddAuthorization();

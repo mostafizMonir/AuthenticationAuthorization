@@ -37,6 +37,18 @@ app.UseHttpsRedirection();
 app.UseMetricServer();
 app.UseHttpMetrics();
 
+// Add detailed logging for authentication
+app.Use(async (context, next) =>
+{
+    var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+    logger.LogInformation("Request path: {Path}", context.Request.Path);
+    logger.LogInformation("Authorization header: {AuthHeader}", context.Request.Headers.Authorization.ToString());
+    
+    await next();
+    
+    logger.LogInformation("Response status code: {StatusCode}", context.Response.StatusCode);
+});
+
 app.UseAuthentication();
 app.UseAuthorization();
 
