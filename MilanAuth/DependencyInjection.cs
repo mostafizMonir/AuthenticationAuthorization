@@ -49,6 +49,8 @@ public static class DependencyInjection
         services.AddTransient <IdGenerator>();
         services.AddTransient(typeof(IdPrinter));
 
+        services.AddHttpClient<TokenService>();
+
         // var jwtKey = configuration["Jwt:Key"] ?? "super_secret_key_123!";
         // var jwtKey = "a6vQ~9#kP2$tLp5*WnZ8&bY4^cX7!mD3";
         // var jwtIssuer = configuration["Jwt:Issuer"] ?? "MilanAuthIssuer";
@@ -71,24 +73,19 @@ public static class DependencyInjection
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         }).AddJwtBearer(o =>
         {
-            o.Authority = configuration["Authentication:Issuer"];
-            o.Audience = configuration["Authentication:Audience"];
+            o.Authority = configuration["Keycloak:Authority"];
+            o.Audience = configuration["Keycloak:Audience"];
             o.RequireHttpsMetadata = false; // Only for development
 
             // Add these configurations:
             o.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuer = true,
                 ValidateAudience = true,
-                ValidateLifetime = true,
+                ValidateIssuer = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = configuration["Authentication:Issuer"],
-                ValidAudience = configuration["Authentication:Audience"],
-                // Important for Keycloak:
-                ClockSkew = TimeSpan.FromSeconds(30) // Adjust tolerance as needed
+                ValidateLifetime = true
             };
 
             o.Events = new JwtBearerEvents
