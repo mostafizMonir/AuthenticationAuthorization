@@ -11,6 +11,8 @@ services:
       - "7002:8080"
     environment:
       - ASPNETCORE_URLS=http://+:8080
+    networks:
+      - net
 
   postgres:
     image: postgres:latest
@@ -23,6 +25,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init-keycloak.sql:/docker-entrypoint-initdb.d/init-keycloak.sql 
+    networks:
+      - net
 
   keycloak:
     image: quay.io/keycloak/keycloak:24.0
@@ -41,6 +45,8 @@ services:
     ports:
       - "8080:8080"
     command: ["start-dev"]
+    networks:
+      - net
 
   seq:
     image: datalust/seq:latest
@@ -49,6 +55,8 @@ services:
     environment:
       - ACCEPT_EULA=Y
     restart: unless-stopped
+    networks:
+      - net
 
   # prometheus:
   #   image: prom/prometheus:latest
@@ -72,3 +80,7 @@ services:
 
 volumes:
   postgres_data:
+
+networks:
+  net:
+    driver: bridge
