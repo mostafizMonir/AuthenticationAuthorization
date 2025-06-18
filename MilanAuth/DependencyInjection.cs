@@ -82,7 +82,7 @@ public static class DependencyInjection
             // Add these configurations:
             o.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateAudience = true,
+                ValidateAudience = false,
                 ValidateIssuer = true,
                 ValidateIssuerSigningKey = true,
                 ValidateLifetime = true
