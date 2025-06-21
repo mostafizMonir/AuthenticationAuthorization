@@ -13,8 +13,21 @@ var builder = WebApplication.CreateBuilder(args);
 // Register all services using extension method
 builder.Services.AddApplicationServices(builder.Configuration);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
- 
+
+app.UseCors("AllowAll");
+
 // Ensure database is created and migrations are applied
 using (var scope = app.Services.CreateScope())
 {
